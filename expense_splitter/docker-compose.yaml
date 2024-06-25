@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    image: expense-splitter
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app/expense_splitter
+    environment:
+      FLASK_APP: main.py

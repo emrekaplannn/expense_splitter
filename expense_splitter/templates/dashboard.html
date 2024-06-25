@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Splitter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+</head>
+<style>
+    header {
+        background-color: #eca966
+    }
+
+    .color {
+        background-color: #E8DACC;
+    }
+
+    .color2 {
+        background-color: #F5F5F4;
+    }
+
+    .transaction-wrapper {
+        margin-top: 20px;
+    }
+
+    .transaction {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .create-expense-link {
+        background-color: #e3dddd;
+        padding: 8px 12px;
+        border-radius: 20px;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+    }
+
+    .create-expense-link:hover {
+        background-color: #9dc0dd;
+        text-decoration: none;
+    }
+
+    .details-btn {
+        margin-left: 10px;
+    }
+
+    .card {
+        height: auto;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+
+    .btn {
+        margin-top: -10px;
+    }
+</style>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-primary " style="background-color:#DDA431;">
+    <div class="container-fluid">
+        <a class="navbar-brand" id="font" href="#">Expense Splitter</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    {% if is_user_logged_in %}
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('dashboard') }}"><i
+                                class="uil uil-user me-1"></i>{{ user.name }}</a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}"><i class="uil uil-signout "></i> Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container mt-4">
+    <div class="card p-4 color2">
+        <h3 class="mb-3">Created Events</h3>
+
+        <a class="nav-link create-expense-link" href="{{ url_for('expense_form') }}">
+            <i class="uil uil-plus"></i> Create new Expense
+        </a>
+
+        <div class="transaction-wrapper">
+            {% for expense_group in user_expense_groups %}
+                <div class="card mb-3 color">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ expense_group.name }}</h5>
+                        <p class="card-text">Created on {{ expense_group.creation_date.strftime('%Y-%m-%d') }}</p>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url_for('add_expense', group_id=expense_group.id) }}" class="btn btn-primary">Add
+                                Expense</a>
+                            <a href="{{ url_for('group_details', group_id=expense_group.id) }}"
+                               class="btn btn-primary details-btn">Show Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .color {
+            background-color: #E8DACC !important;
+        }
+    </style>
+</head>
+<body class="bg-light color">
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Expense Details: {{ group.name }}</h2>
+
+
+    <div class="row">
+        <div class="col">
+            <h3>Total Expense</h3>
+            <p>{{ total_expense }}</p>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Group Members</h3>
+            <ul>
+                {% for member in group_members %}
+                    <li>{{ member.member_name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <h3>Total results of the payments</h3>
+            <ul>
+                {% for debtor, creditors in debts_with_names.items() %}
+    {% for creditor, amount in creditors.items() %}
+        <li>{{ debtor }} need to pay  {{ amount }} TL  to {{ creditor }}</li>
+    {% endfor %}
+    {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+
+    <div class="row">
+        <div class="col">
+            <h3>Expense Distribution Details</h3>
+            <div class="row mt-2 mb-2">
+                <div class="col">
+                    <div class="d-flex justify-content-end ">
+                        <a href="{{ url_for('add_expense', group_id=group.id) }}" class="btn btn-primary">Add
+                            Expense</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount per person</th>
+                    <th>Payed by</th>
+                    <th>Group Members with Share</th>
+                    <th>Creation Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.description }}</td>
+                        <td>{{ expense.amount }}</td>
+                        <td>{% for member in group_members %}
+                            {% if member.id == expense.payer_id %}
+                                {{ member.member_name }}
+                            {% endif %}
+                        {% endfor %}</td>
+                        <td>
+                            <ul>
+                                {% for member in expense.members %}
+                                    <li>{{ member.member_name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ expense.date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
